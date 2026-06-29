@@ -1,0 +1,45 @@
+{
+  "name": "OmniRoute",
+  "slug": "omniroute",
+  "categories": [
+    0
+  ],
+  "date_created": "2026-06-29",
+  "type": "ct",
+  "updateable": true,
+  "privileged": false,
+  "has_arm": true,
+  "interface_port": 20128,
+  "documentation": "https://github.com/diegosouzapw/OmniRoute#readme",
+  "website": "https://github.com/diegosouzapw/OmniRoute",
+  "logo": "",
+  "description": "OmniRoute is a free local AI gateway that routes requests across 200+ AI providers through a single OpenAI-compatible /v1 endpoint with intelligent fallback, compression, and a built-in web dashboard.",
+  "install_methods": [
+    {
+      "type": "default",
+      "script": "ct/omniroute.sh",
+      "config_path": "/opt/omniroute/.env",
+      "resources": {
+        "cpu": 2,
+        "ram": 4096,
+        "hdd": 4,
+        "os": "Debian",
+        "version": "13"
+      }
+    }
+  ],
+  "default_credentials": {
+    "username": null,
+    "password": null
+  },
+  "notes": [
+    {
+      "text": "Initial build (npm install + Next.js build) takes 10-20 minutes.",
+      "type": "info"
+    },
+    {
+      "text": "Configure provider API keys via the web dashboard on first login at http://<IP>:20128.",
+      "type": "info"
+    }
+  ]
+}
