@@ -27,7 +27,7 @@ fetch_and_deploy_gh_release "omniroute" "diegosouzapw/OmniRoute" "tarball"
 msg_info "Building OmniRoute"
 cd /opt/omniroute
 $STD npm ci --no-audit --no-fund || $STD npm install --no-audit --no-fund
-NEXT_TELEMETRY_DISABLED=1 NODE_OPTIONS="--max-old-space-size=3584" $STD npm run build
+NEXT_TELEMETRY_DISABLED=1 NODE_OPTIONS="--max-old-space-size=6144" $STD npm run build
 mkdir -p /opt/omniroute/data
 msg_ok "Built OmniRoute"
 
