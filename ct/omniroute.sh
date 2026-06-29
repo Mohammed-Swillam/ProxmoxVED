@@ -7,9 +7,10 @@ source <(curl -fsSL https://raw.githubusercontent.com/community-scripts/ProxmoxV
 
 APP="OmniRoute"
 var_tags="${var_tags:-ai;llm;gateway;proxy}"
-var_cpu="${var_cpu:-2}"
-var_ram="${var_ram:-4096}"
+var_cpu="${var_cpu:-4}"
+var_ram="${var_ram:-8192}"
 var_disk="${var_disk:-8}"
+var_swap="${var_swap:-2048}"
 var_os="${var_os:-debian}"
 var_version="${var_version:-13}"
 var_unprivileged="${var_unprivileged:-1}"

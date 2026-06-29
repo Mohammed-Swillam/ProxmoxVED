@@ -20,8 +20,8 @@
       "script": "ct/omniroute.sh",
       "config_path": "/opt/omniroute/.env",
       "resources": {
-        "cpu": 2,
-        "ram": 4096,
+        "cpu": 4,
+        "ram": 8192,
         "hdd": 8,
         "os": "Debian",
         "version": "13"
