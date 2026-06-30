@@ -20,8 +20,8 @@
       "script": "ct/omniroute.sh",
       "config_path": "/opt/omniroute/.env",
       "resources": {
-        "cpu": 4,
-        "ram": 8192,
+        "cpu": 2,
+        "ram": 2048,
         "hdd": 8,
         "os": "Debian",
         "version": "13"
@@ -34,7 +34,7 @@
   },
   "notes": [
     {
-      "text": "Initial build (npm install + Next.js build) takes 10-20 minutes.",
+      "text": "Installs from pre-built npm package — no compilation needed (~1-2 min).",
       "type": "info"
     },
     {

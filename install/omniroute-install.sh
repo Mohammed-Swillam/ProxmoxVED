@@ -22,14 +22,10 @@ msg_ok "Installed Dependencies"
 
 NODE_VERSION="22" setup_nodejs
 
-fetch_and_deploy_gh_release "omniroute" "diegosouzapw/OmniRoute" "tarball"
-
-msg_info "Building OmniRoute"
-cd /opt/omniroute
-$STD npm ci --no-audit --no-fund || $STD npm install --no-audit --no-fund
-NEXT_TELEMETRY_DISABLED=1 NODE_OPTIONS="--max-old-space-size=6144" $STD npm run build
+msg_info "Installing OmniRoute (pre-built npm package)"
+$STD npm install -g omniroute
 mkdir -p /opt/omniroute/data
-msg_ok "Built OmniRoute"
+msg_ok "Installed OmniRoute"
 
 msg_info "Configuring OmniRoute"
 cat <<EOF >/opt/omniroute/.env
@@ -50,7 +46,7 @@ After=network.target
 Type=simple
 EnvironmentFile=/opt/omniroute/.env
 WorkingDirectory=/opt/omniroute
-ExecStart=/usr/bin/npm start
+ExecStart=/usr/bin/omniroute serve
 Restart=on-failure
 RestartSec=5
 
@@ -59,6 +55,9 @@ WantedBy=multi-user.target
 EOF
 systemctl enable -q --now omniroute
 msg_ok "Created Service"
+
+$STD apt -y autoremove
+$STD apt -y autoclean
 
 motd_ssh
 customize

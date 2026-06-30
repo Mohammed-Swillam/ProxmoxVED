@@ -7,10 +7,10 @@ source <(curl -fsSL https://raw.githubusercontent.com/community-scripts/ProxmoxV
 
 APP="OmniRoute"
 var_tags="${var_tags:-ai;llm;gateway;proxy}"
-var_cpu="${var_cpu:-4}"
-var_ram="${var_ram:-8192}"
+var_cpu="${var_cpu:-2}"
+var_ram="${var_ram:-2048}"
 var_disk="${var_disk:-8}"
-var_swap="${var_swap:-2048}"
+var_swap="${var_swap:-512}"
 var_os="${var_os:-debian}"
 var_version="${var_version:-13}"
 var_unprivileged="${var_unprivileged:-1}"
@@ -39,13 +39,9 @@ function update_script() {
     cp -r /opt/omniroute/data /opt/omniroute_data_backup
     msg_ok "Backed up Data"
 
-    CLEAN_INSTALL=1 fetch_and_deploy_gh_release "omniroute" "diegosouzapw/OmniRoute" "tarball"
-
-    msg_info "Building ${APP}"
-    cd /opt/omniroute
-    $STD npm ci --no-audit --no-fund || $STD npm install --no-audit --no-fund
-    $STD npm run build
-    msg_ok "Built ${APP}"
+    msg_info "Updating ${APP} (pre-built npm package)"
+    $STD npm install -g omniroute@latest
+    msg_ok "Updated ${APP}"
 
     msg_info "Restoring Data"
     rm -rf /opt/omniroute/data
