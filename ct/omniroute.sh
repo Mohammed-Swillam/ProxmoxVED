@@ -30,30 +30,45 @@ function update_script() {
     exit
   fi
 
-  if check_for_gh_release "omniroute" "diegosouzapw/OmniRoute"; then
-    msg_info "Stopping Service"
-    systemctl stop omniroute
-    msg_ok "Stopped Service"
+  msg_info "Checking for update"
+  local current_version latest_version
+  current_version=$(npm list -g omniroute --depth=0 2>/dev/null | grep -oP 'omniroute@\K.*')
+  latest_version=$(npm view omniroute version 2>/dev/null)
 
-    msg_info "Backing up Data"
-    cp -r /opt/omniroute/data /opt/omniroute_data_backup
-    msg_ok "Backed up Data"
-
-    msg_info "Updating ${APP} (pre-built npm package)"
-    $STD npm install -g omniroute@latest
-    msg_ok "Updated ${APP}"
-
-    msg_info "Restoring Data"
-    rm -rf /opt/omniroute/data
-    cp -r /opt/omniroute_data_backup/. /opt/omniroute/data
-    rm -rf /opt/omniroute_data_backup
-    msg_ok "Restored Data"
-
-    msg_info "Starting Service"
-    systemctl start omniroute
-    msg_ok "Started Service"
-    msg_ok "Updated successfully!"
+  if [[ -z "$latest_version" ]]; then
+    msg_ok "Could not reach npm registry, skipping update check"
+    exit
   fi
+
+  if [[ "$current_version" == "$latest_version" ]]; then
+    msg_ok "No update available (${current_version})"
+    exit
+  fi
+
+  msg_ok "Update available: ${current_version:-not installed} → ${latest_version}"
+
+  msg_info "Stopping Service"
+  systemctl stop omniroute
+  msg_ok "Stopped Service"
+
+  msg_info "Backing up Data"
+  cp -r /opt/omniroute/data /opt/omniroute_data_backup
+  msg_ok "Backed up Data"
+
+  msg_info "Updating ${APP} (pre-built npm package)"
+  $STD npm install -g omniroute@latest
+  msg_ok "Updated ${APP}"
+
+  msg_info "Restoring Data"
+  rm -rf /opt/omniroute/data
+  cp -r /opt/omniroute_data_backup/. /opt/omniroute/data
+  rm -rf /opt/omniroute_data_backup
+  msg_ok "Restored Data"
+
+  msg_info "Starting Service"
+  systemctl start omniroute
+  msg_ok "Started Service"
+  msg_ok "Updated successfully!"
   exit
 }
 

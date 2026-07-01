@@ -16,14 +16,18 @@ update_os
 msg_info "Installing Dependencies"
 $STD apt install -y \
   build-essential \
-  python3 \
-  git
+  python3
 msg_ok "Installed Dependencies"
 
 NODE_VERSION="22" setup_nodejs
 
 msg_info "Installing OmniRoute (pre-built npm package)"
 $STD npm install -g omniroute
+OMNIROUTE_BIN="$(command -v omniroute)"
+if [[ -z "$OMNIROUTE_BIN" ]]; then
+  msg_error "omniroute binary not found after npm install -g"
+  exit 1
+fi
 mkdir -p /opt/omniroute/data
 msg_ok "Installed OmniRoute"
 
@@ -46,7 +50,7 @@ After=network.target
 Type=simple
 EnvironmentFile=/opt/omniroute/.env
 WorkingDirectory=/opt/omniroute
-ExecStart=/usr/bin/omniroute serve
+ExecStart=${OMNIROUTE_BIN} serve
 Restart=on-failure
 RestartSec=5
 
@@ -55,9 +59,6 @@ WantedBy=multi-user.target
 EOF
 systemctl enable -q --now omniroute
 msg_ok "Created Service"
-
-$STD apt -y autoremove
-$STD apt -y autoclean
 
 motd_ssh
 customize
